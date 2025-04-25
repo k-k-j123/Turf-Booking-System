@@ -1,0 +1,168 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <title>Super_admin</title>
+</head>
+
+<body class="bg-green-100">
+    <nav class="bg-green-800 p-4">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center">
+                <span class="text-white text-2xl font-bold">Admin Panel</span>
+                <div class="flex space-x-4">
+                    <!-- Removed Home, Profile, and Settings links -->
+                </div>
+            </div>
+            <div class="flex justify-center mt-4">
+                <div class="inline-flex rounded-md shadow-xs" role="group">
+                    <button type="button" id="Turfs" class="px-8 py-4 text-sm text-2xl text-white bg-green-700 border border-green-700 rounded-l-lg hover:bg-green-600 focus:z-10 focus:ring-2 focus:ring-green-500 focus:bg-green-600">
+                        Turfs
+                    </button>
+                    <button type="button" id="Users" class="px-8 py-4 text-sm text-2xl text-white bg-green-700 border-t border-b border-green-700 hover:bg-green-600 focus:z-10 focus:ring-2 focus:ring-green-500 focus:bg-green-600">
+                        Users
+                    </button>
+                    <button type="button" id="Bookings" class="px-8 py-4 text-sm text-2xl text-white bg-green-700 border border-green-700 rounded-r-lg hover:bg-green-600 focus:z-10 focus:ring-2 focus:ring-green-500 focus:bg-green-600">
+                        Bookings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div id="content" class="container mx-auto p-4">
+        <!-- Content will be loaded here -->
+    </div>
+    <footer class="bg-green-800 p-4 mt-10">
+        <div class="container mx-auto text-center text-gray-300">
+            &copy; 2023 Turf Booking System. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('Turfs').addEventListener('click', function() {
+            loadTurfs();
+        });
+
+        document.getElementById('Users').addEventListener('click', function() {
+            loadUsers();
+        });
+
+        document.getElementById('Bookings').addEventListener('click', function() {
+            showDateChooser();
+        });
+
+        function loadContent(page) {
+            fetch(page)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('content').innerHTML = data;
+                });
+        }
+
+        function loadTurfs() {
+            fetch('/api/turfs')
+                .then(response => response.json())
+                .then(data => {
+                    let table = '<table class="min-w-full bg-white"><thead><tr><th class="py-2">ID</th><th class="py-2">Name</th><th class="py-2">Location</th><th class="py-2">Price Per Hour</th><th class="py-2">Dimensions</th><th class="py-2">Image</th><th class="py-2">Created At</th><th class="py-2">Actions</th></tr></thead><tbody>';
+                    data.forEach(turf => {
+                        table += `<tr><td class="border px-4 py-2">${turf.turf_id}</td><td class="border px-4 py-2">${turf.name}</td><td class="border px-4 py-2">${turf.location}</td><td class="border px-4 py-2">${turf.pricePerHour}</td><td class="border px-4 py-2">${turf.ground_width}x${turf.ground_length}x${turf.ground_height}</td><td class="border px-4 py-2"><img src="${turf.image}" alt="${turf.name}" class="w-16 h-16"></td><td class="border px-4 py-2">${new Date(turf.createdAt).toLocaleDateString()}</td><td class="border px-4 py-2"><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button></td></tr>`;
+                    });
+                    table += '</tbody></table>';
+                    document.getElementById('content').innerHTML = table;
+                });
+        }
+
+        function loadUsers() {
+            fetch('/api/users')
+                .then(response => response.json())
+                .then(data => {
+                    let table = `
+                        <table class="min-w-full bg-white">
+                            <thead>
+                                <tr>
+                                    <th class="py-2">ID</th>
+                                    <th class="py-2">Username</th>
+                                    <th class="py-2">Email</th>
+                                    <th class="py-2">Role</th>
+                                    <th class="py-2">Approved</th>
+                                    <th class="py-2">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">`;
+
+                    data.forEach(user => {
+                        table += `
+                            <tr>
+                                <td class="border px-4 py-2">${user.userId}</td>
+                                <td class="border px-4 py-2">${user.username}</td>
+                                <td class="border px-4 py-2">${user.email}</td>
+                                <td class="border px-4 py-2">${user.role}</td>
+                                <td class="border px-4 py-2">${user.approved ? '✅' : '❌'}</td>
+                                <td class="border px-4 py-2">
+                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded approve-btn" 
+                                        data-user-id="${user.userId}" ${user.approved ? 'disabled' : ''}>
+                                        ${user.approved ? 'Approved' : 'Approve'}
+                                    </button>
+                                </td>
+                            </tr>`;
+                    });
+
+                    table += `</tbody></table>`;
+                    document.getElementById('content').innerHTML = table;
+
+                    // Attach event listener to approve buttons after rendering
+                    document.querySelectorAll('.approve-btn').forEach(button => {
+                        button.addEventListener('click', function () {
+                            approveUser(this.getAttribute('data-user-id'), this);
+                        });
+                    });
+                });
+        }
+
+        // Function to approve user
+        function approveUser(userId, button) {
+            fetch(`/api/users/api/admins/approve/${userId}`, {
+                method: 'PUT',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data); // Show success message
+                button.textContent = 'Approved';
+                button.disabled = true; // Disable button after approval
+
+                // Update the "Approved" status in the UI
+                button.closest('tr').querySelectorAll('td')[4].textContent = '✅';
+            })
+            .catch(error => console.error('Error approving user:', error));
+        }
+
+        // Load users on page load
+        loadUsers();
+
+        function showDateChooser() {
+            document.getElementById('content').innerHTML = '<input type="date" id="bookingDate" class="border p-2 rounded"><button id="loadBookings" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">Load Bookings</button>';
+            document.getElementById('loadBookings').addEventListener('click', function() {
+                const date = document.getElementById('bookingDate').value;
+                loadBookings(date);
+            });
+        }
+
+        function loadBookings(date) {
+            fetch(`/api/bookings/date?date=${date}`)
+                .then(response => response.json())
+                .then(data => {
+                    let table = '<table class="min-w-full bg-white"><thead><tr><th class="py-2">Booking ID</th><th class="py-2">User</th><th class="py-2">Turf</th><th class="py-2">Slot</th><th class="py-2">Booking Date</th><th class="py-2">Total Price</th><th class="py-2">Status</th><th class="py-2">Actions</th></tr></thead><tbody>';
+                    data.forEach(booking => {
+                        table += `<tr><td class="border px-4 py-2">${booking.booking_id}</td><td class="border px-4 py-2">${booking.user.username}</td><td class="border px-4 py-2">${booking.turf.name}</td><td class="border px-4 py-2">${booking.slot.start_time.hour}:${booking.slot.start_time.minute} - ${booking.slot.end_time.hour}:${booking.slot.end_time.minute}</td><td class="border px-4 py-2">${new Date(booking.booking_date).toLocaleDateString()}</td><td class="border px-4 py-2">${booking.total_price}</td><td class="border px-4 py-2">${booking.status}</td><td class="border px-4 py-2"><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button></td></tr>`;
+                    });
+                    table += '</tbody></table>';
+                    document.getElementById('content').innerHTML = table;
+                });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Turf</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex flex-col items-center p-8">
+        <!-- Carousel Section (Top) -->
+        <div class="w-full max-w-4xl mb-8">
+            <div id="default-carousel" class="relative w-full" data-carousel="slide">
+                <!-- Carousel wrapper -->
+                <div class="relative h-56 overflow-hidden rounded-lg md:h-96" id="carouselImages">
+                    <!-- Images will be populated here -->
+                </div>
+                <!-- Slider indicators -->
+                <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse" id="carouselIndicators">
+                    <!-- Indicators will be populated here -->
+                </div>
+                <!-- Slider controls -->
+                <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                        <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
+                        </svg>
+                        <span class="sr-only">Previous</span>
+                    </span>
+                </button>
+                <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                        <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                        </svg>
+                        <span class="sr-only">Next</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Table Section (Bottom) -->
+        <div class="w-full max-w-4xl">
+            <h2 id="turfName" class="text-3xl font-bold text-center mb-6">Turf Name</h2>
+            <table class="w-full bg-white rounded-lg shadow-lg overflow-hidden" id="turfDetailsTable">
+                <tr class="border-b">
+                    <td class="p-4 font-semibold">Turf Description</td>
+                    <td class="p-4" id="turfDescription">Loading...</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="p-4 font-semibold">Turf Length</td>
+                    <td class="p-4" id="turfLength">Loading...</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="p-4 font-semibold">Turf Width</td>
+                    <td class="p-4" id="turfWidth">Loading...</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="p-4 font-semibold">Turf Height</td>
+                    <td class="p-4" id="turfHeight">Loading...</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="p-4 font-semibold">Turf Address</td>
+                    <td class="p-4" id="turfAddress">Loading...</td>
+                </tr>
+                <tr>
+                    <td class="p-4 font-semibold">Turf Price</td>
+                    <td class="p-4" id="turfPrice">Loading...</td>
+                </tr>
+            </table>
+
+            <!-- Button at Bottom Center -->
+            <div class="flex justify-center mt-8">
+                <button id="book_the_turf" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Book Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const regex = /([^&=]+)=([^&]*)/g;
+            let m;
+            while (m = regex.exec(queryString)) {
+                params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+            }
+            return params;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = getQueryParams();
+            const turfId = params.turf_id; // Get the turf ID from the query parameter
+
+            if (turfId) {
+                fetch(`http://localhost:8080/api/turfs/${encodeURIComponent(turfId)}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Populate the turf details
+                        document.getElementById('turfName').textContent = data.name;
+                        document.getElementById('turfDescription').textContent = data.description;
+                        document.getElementById('turfLength').textContent = data.ground_length;
+                        document.getElementById('turfWidth').textContent = data.ground_width;
+                        document.getElementById('turfHeight').textContent = data.ground_height;
+                        document.getElementById('turfAddress').textContent = data.location;
+                        document.getElementById('turfPrice').textContent = `$${data.pricePerHour.toFixed(2)}`;
+
+                        // Populate the carousel images
+                        const carouselImages = document.getElementById('carouselImages');
+                        const carouselIndicators = document.getElementById('carouselIndicators');
+                        const images = data.image ? [data.image] : [];
+                        images.forEach((image, index) => {
+                            // Create image element
+                            const imgElement = document.createElement('div');
+                            imgElement.className = 'block duration-700 ease-in-out';
+                            imgElement.setAttribute('data-carousel-item', '');
+                            imgElement.innerHTML = `<img src="${image}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">`;
+                            carouselImages.appendChild(imgElement);
+
+                            // Create indicator element
+                            const indicatorElement = document.createElement('button');
+                            indicatorElement.type = 'button';
+                            indicatorElement.className = 'w-3 h-3 rounded-full';
+                            indicatorElement.setAttribute('aria-current', index === 0 ? 'true' : 'false');
+                            indicatorElement.setAttribute('aria-label', `Slide ${index + 1}`);
+                            indicatorElement.setAttribute('data-carousel-slide-to', index);
+                            carouselIndicators.appendChild(indicatorElement);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                    });
+            } else {
+                document.getElementById('turfDetailsTable').innerHTML = '<tr><td colspan="2">No turf ID provided.</td></tr>';
+            }
+
+            // Add event listener to the "Book Now" button
+            document.getElementById('book_the_turf').addEventListener('click', function () {
+                const params = getQueryParams();
+                const turfId = params.turf_id; // Get the turf ID from the query parameter
+                if (turfId) {
+                    window.location.href = `/bookturf?turf_id=${encodeURIComponent(turfId)}`;
+                } else {
+                    alert('No turf ID provided.');
+                }
+            });
+        });
+        
+    </script>
+</body>
+
+</html>

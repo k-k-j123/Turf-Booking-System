@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <h1 class="text-3xl text-center p-4">Your Bookings</h1>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Booking ID</th>
+                    <th class="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Turf Name</th>
+                    <th class="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Location</th>
+                    <th class="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Date</th>
+                    <th class="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Time</th>
+                    <th class="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Total Price</th>
+                    <th class="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Status</th>
+                    <th class="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">Action</th>
+                </tr>
+            </thead>
+            <tbody id="bookingsTableBody">
+                <!-- Bookings will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Function to format time from the API response
+        function formatTime(timeObj) {
+            const hour = String(timeObj.hour).padStart(2, '0');
+            const minute = String(timeObj.minute).padStart(2, '0');
+            return `${hour}:${minute}`;
+        }
+
+        // Function to load bookings
+        async function loadBookings() {
+            try {
+                // Replace {userId} with the actual user ID - you might want to get this from your authentication context
+                const userId = 1; // Replace with actual user ID
+                const response = await fetch(`/api/bookings/user/${userId}`);
+                const bookings = await response.json();
+
+                const tableBody = document.getElementById('bookingsTableBody');
+                tableBody.innerHTML = ''; // Clear existing content
+
+                bookings.forEach(booking => {
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-50';
+                    
+                    row.innerHTML = `
+                        <td class="px-6 py-4 border-b border-gray-300 text-sm text-gray-900">${booking.booking_id}</td>
+                        <td class="px-6 py-4 border-b border-gray-300 text-sm text-gray-900">${booking.turf.name}</td>
+                        <td class="px-6 py-4 border-b border-gray-300 text-sm text-gray-900">${booking.turf.location}</td>
+                        <td class="px-6 py-4 border-b border-gray-300 text-sm text-gray-900">${booking.booking_date}</td>
+                        <td class="px-6 py-4 border-b border-gray-300 text-sm text-gray-900">
+                            ${formatTime(booking.slot.start_time)} - ${formatTime(booking.slot.end_time)}
+                        </td>
+                        <td class="px-6 py-4 border-b border-gray-300 text-sm text-gray-900">$${booking.total_price}</td>
+                        <td class="px-6 py-4 border-b border-gray-300 text-sm text-gray-900">
+                            <span class="px-2 py-1 rounded ${
+                                booking.status === 'CONFIRMED' ? 'bg-green-100 text-green-800' :
+                                booking.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
+                                'bg-yellow-100 text-yellow-800'
+                            }">${booking.status}</span>
+                        </td>
+                        <td class="px-6 py-4 border-b border-gray-300 text-sm text-gray-900">
+                            ${booking.status === 'CONFIRMED' ? 
+                                `<button onclick="cancelBooking(${booking.booking_id})" 
+                                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                                    Cancel
+                                </button>` : ''}
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        // Function to cancel a booking
+        async function cancelBooking(bookingId) {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                try {
+                    const response = await fetch(`/api/bookings/${bookingId}/cancel`, {
+                        method: 'PUT'
+                    });
+                    if (response.ok) {
+                        loadBookings(); // Reload the bookings after cancellation
+                    } else {
+                        alert('Failed to cancel booking. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error cancelling booking:', error);
+                    alert('Failed to cancel booking. Please try again.');
+                }
+            }
+        }
+
+        // Load bookings when the page loads
+        document.addEventListener('DOMContentLoaded', loadBookings);
+    </script>
+</body>
+</html>

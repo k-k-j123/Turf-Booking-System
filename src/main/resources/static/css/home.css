@@ -1,0 +1,222 @@
+body{
+    font-family: "Montserrat", sans-serif;
+    background-color: #050505;
+    margin: 0%;
+    padding:0%;
+    color: white;
+    text-align: center;
+}
+
+header{
+    height: 20%;
+    /* width:100%; */
+    display: flex;
+}
+
+footer{
+    height: 30%;
+}
+
+section{
+    height: 20%;
+}
+
+.navbar{
+    justify-content: flex-start;
+    width: 100%;
+    display: flex;
+    background-color: white;
+    position: fixed;
+}
+
+.nav-items{
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    margin-right: 2rem;
+}
+
+.nav-options{
+    text-decoration: none;
+    margin: 2rem;
+    font-weight: bolder;
+
+}
+
+#logo img{
+    width:5rem;
+    height:5rem;
+    border-radius: 50%;
+    margin-left: 1.5rem;
+}
+
+.hero-1{
+    margin-top: 15rem;
+    
+}
+
+#main-head{
+    font-size: 300%;
+    font-weight: 800;
+    display: inline-block;
+    margin-bottom: 0.7rem;
+}
+
+#descp{
+    font-size: xx-large;
+    margin-top: 0.5rem;
+    width: 850px;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+.btn{
+    height: 40px;
+    border-radius: 0.5rem;
+    margin-left: 0.9rem;
+    width: 100px;
+}
+
+.hero-2{
+    margin-top: 18rem;
+    background-color: whitesmoke;
+    color: #050505;
+    padding-bottom: 8rem;
+}
+.hero-2-head{
+    padding-bottom: 2.5rem;
+    font-size: 300%;
+    font-weight: 800;
+    display: inline-block;
+    margin-bottom: 0.7rem;
+}
+
+#Turf-container{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.turf-card{
+    height: 430px;
+    width: 510px;
+    background-color: white;
+    margin-bottom: 2rem;
+}
+
+.card-img{
+    height: 250px;
+    width: 450px;
+    border: white;
+}
+
+.card-title{
+    font-weight: bold;
+    font-size: x-large;
+    padding-right: 40%;
+    width: 240px;
+}
+
+.hero-3{
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+    background-color: rgba(225, 221, 221, 0.763);
+    color: #050505;
+}
+
+.sec-title{
+    font-size: 320%;
+    font-weight: 00;
+    display: inline-block;
+    margin-bottom: 0.3rem;
+}
+
+.sec-content{
+    font-size: xx-large;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+#src-loc{
+    height: 35px;
+    width: 250px;
+    border-radius: 0.1rem;
+    border: whitesmoke;
+    padding-left: 0.9rem;
+}
+
+#search{
+    height: 35px;
+    background-color: #050505;
+    color:azure;
+    padding-left: 1.7rem;
+    padding-right: 1rem;
+}
+
+.footer-sec{
+    display: flex;
+    height: 60px;
+    width: 98%;
+    padding-top: 2.5rem;
+    justify-content: center;
+}
+
+.rights{
+    display: flex;
+    justify-content: center;
+}
+
+.rights i{
+    margin-right: 2rem;
+}
+
+.footer-links a{
+    margin-left: 2rem;
+    text-decoration: none;
+    color: white;
+    margin-left: 15rem;
+}
+
+.nav-optionsi {
+    text-decoration: none;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin: 2rem;
+    font-weight: bolder;
+}
+#nav-signup {
+    background-color: #007bff;
+    color: white;
+}
+.nav-optionsi:hover {
+    background-color: #e9ecef;
+}
+#nav-signup:hover {
+    background-color: #0056b3;
+}
+
+#nav-logout {
+    background-color: #e0f7fa;  /* Light Blue */
+    color: #00796b;  /* A contrasting text color */
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+#nav-logout:hover {
+    background-color: #b2ebf2;  /* Slightly darker blue for hover effect */
+}
+
+/* Role-based visibility */
+.customer-only, .admin-only, .super-admin-only {
+    display: none;
+}
+
+body.customer .customer-only,
+body.admin .admin-only,
+body.admin .customer-only,
+body.super-admin .super-admin-only,
+body.super-admin .admin-only,
+body.super-admin .customer-only {
+    display: block;
+}

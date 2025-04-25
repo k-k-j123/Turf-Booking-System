@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TurfBook - Available Turfs</title>
+    <link rel="icon" href="/images/FindTurfLogo.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        header {
+            height: 20%;
+            /* width:100%; */
+            display: flex;
+        }
+
+        #logo img {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            margin-left: 0;
+            padding-left: 0%;
+        }
+
+        .nav {
+            justify-content: flex-start;
+            width: 100%;
+            display: flex;
+            background-color: white;
+            position: fixed;
+            margin-left: 30px;
+        }
+
+        .nav-optionsi {
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin: 2rem;
+            font-weight: bolder;
+        }
+
+        .nav-optionsi:hover {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="#" class="text-2xl font-bold text-green-600">Find-Your Turf</a>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="/dashboard" class="nav-optionsi text-gray-600 hover:text-green-600">Home</a>
+                    <!--<a href="/view_turf" class="nav-optionsi customer-only text-gray-600 hover:text-green-600">Turfs</a>
+                    <a href="#" class="nav-optionsi customer-only text-gray-600 hover:text-green-600">Cricket</a>
+                    <a href="/mybooking" class="nav-optionsi customer-only text-gray-600 hover:text-green-600">My
+                        Bookings</a>
+                    <a href="#" class="nav-optionsi text-gray-600 hover:text-green-600">About</a>
+                    <a href="#" class="nav-optionsi text-gray-600 hover:text-green-600">Contact</a>-->
+                    <a href="/logout" id="logout" class="nav-optionsi text-gray-600 hover:text-green-600"
+                        style="color: rgb(219, 76, 76);">LogOut</a>
+                </nav>
+                <div class="md:hidden">
+                    <button id="menuToggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden">//no need to make changes here only for resposiveness in mobile
+            <nav class="flex flex-col space-y-4 py-4 px-4">
+                <a href="#" class="text-gray-600 hover:text-green-600">Home</a>
+                <a href="#" class="text-gray-600 hover:text-green-600">Football</a>
+                <a href="#" class="text-gray-600 hover:text-green-600">Cricket</a>
+                <a href="#" class="text-gray-600 hover:text-green-600">About</a>
+                <a href="#" class="text-gray-600 hover:text-green-600">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Available Turfs</h1>
+
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+                <p class="text-xl font-semibold mb-4 md:mb-0">Total Turfs: <span id="turfCount">12</span></p>
+                <div class="flex space-x-4">
+                    <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">Hurry
+                        Up</button>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">Be
+                        Fast</button>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 max-w-3xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center gap-4">
+                    <div class="relative flex-grow w-full">
+                        <input type="text" id="searchInput" placeholder="Search for turfs..." style="padding-top: 18px; padding-bottom: 18px;" class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <button id="searchButton" style="padding-top: 30px; padding-bottom: 30px; padding-left: 20px;padding-right: 20px; margin-left: 1px; width: 6rem; height: 2rem; " class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors duration-300 flex items-center justify-center w-full md:w-auto">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="turfList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+           
+        </div>
+
+        <div class="mt-8 flex justify-center">
+            <nav class="inline-flex rounded-md shadow">
+                <a href="#" class="px-4 py-2 rounded-l-md bg-white text-gray-700 hover:bg-gray-50">Previous</a>
+                <a href="#" class="px-4 py-2 bg-green-500 text-white hover:bg-green-600">1</a>
+                <a href="#" class="px-4 py-2 bg-white text-gray-700 hover:bg-gray-50">2</a>
+                <a href="#" class="px-4 py-2 bg-white text-gray-700 hover:bg-gray-50">3</a>
+                <a href="#" class="px-4 py-2 rounded-r-md bg-white text-gray-700 hover:bg-gray-50">Next</a>
+            </nav>
+        </div>
+    </main>
+    <div id="bookingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+        <div class="bg-white p-8 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-start mb-4">
+                <h2 id="modalTurfName" class="text-2xl font-bold"></h2>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <img id="modalTurfImage" src="/placeholder.svg" alt="Turf Image" class="w-full h-64 object-cover rounded-lg mb-4">
+                    <p id="modalTurfLocation" class="text-gray-600 mb-2"></p>
+                    <p id="modalTurfSport" class="text-gray-600 mb-2"></p>
+                    <p id="modalTurfPrice" class="text-xl font-semibold mb-2"></p>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <p class="font-semibold">Width</p>
+                            <p id="modalTurfWidth"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Length</p>
+                            <p id="modalTurfLength"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Height</p>
+                            <p id="modalTurfHeight"></p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Book a Slot</h3>
+                    <div class="mb-4">
+                        <label for="bookingDate" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                        <input type="date" id="bookingDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="bookingTime" class="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                        <select id="bookingTime" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="">Select a time slot</option>
+                        </select>
+                    </div>
+                    <button id="confirmBooking" class="btn bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors w-full">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div style="margin-left: 200px;" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">TurfBook</h3>
+                    <p class="text-gray-400">Book your perfect sports turf with ease.</p>
+                </div>
+                <div style="margin-left: 50px;">
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <nav class="flex flex-col space-y-2">
+                        <a href="#" class="text-gray-400 hover:text-white">About Us</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Contact</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                    </nav>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-gray-400">
+                <p>&copy; 2025 TurfBook. All rights reserved BY Manish & Kaushik.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        document.getElementById('menuToggle').addEventListener('click', function () {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+
+        const turfList = document.getElementById('turfList');
+        const bookingModal = document.getElementById('bookingModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalTurfName = document.getElementById('modalTurfName');
+        const modalTurfImage = document.getElementById('modalTurfImage');
+        const modalTurfLocation = document.getElementById('modalTurfLocation');
+        const modalTurfSport = document.getElementById('modalTurfSport');
+        const modalTurfPrice = document.getElementById('modalTurfPrice');
+        const modalTurfWidth = document.getElementById('modalTurfWidth');
+        const modalTurfLength = document.getElementById('modalTurfLength');
+        const modalTurfHeight = document.getElementById('modalTurfHeight');
+        const bookingDate = document.getElementById('bookingDate');
+        const bookingTime = document.getElementById('bookingTime');
+        let turfs = [];
+        let selectedTurfId;
+        let timeSlot= [];
+        let selectedTimeslot;
+        let userDetail;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/turfs')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(turfData => {
+                    const turfCount = document.getElementById('turfCount');
+                    turfCount.textContent = turfData.length; // Update the turf count
+
+                    const turfContainer = document.querySelector('.grid'); // Select the grid container for turfs
+                    turfContainer.innerHTML = ''; // Clear any existing turf cards
+
+                    turfs = turfData; // Store the fetched data in the 'turfs' array
+                    turfs.forEach(turfd => {
+                        populateTurfs(turfd); // Populate turf cards
+                    });
+
+                    populateTimeSlots(); // Populate time slots once, after all turfs are populated
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        });
+
+        function createTurfCard(turf) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-lg shadow-md overflow-hidden';
+            card.innerHTML = `
+                <img src="${turf.image}" alt="${turf.name}" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold mb-2">${turf.name}</h2>
+                    <p class="text-gray-600 mb-2">Location: ${turf.location}</p>
+                    <p class="text-gray-600 mb-2">Sport: ${turf.sport}</p>
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <span class="ml-1">${turf.rating} (${Math.floor(Math.random() * 50) + 10} reviews)</span>
+                    </div>
+                    <button class="btn bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors w-full book-now" data-turf-id="${turf.turf_id}">Book Now</button>
+                </div>
+            `;
+            return card;
+        }
+        
+        function populateTurfs(turf) {
+                const card = createTurfCard(turf);
+                turfList.appendChild(card);
+        }
+
+        function openModal(turfId) {
+            console.log('turfs array:', turfs);
+            console.log('Turf ID:', turfId);
+            selectedTurfId = turfId;
+
+            const turf = turfs.find(t => t.turf_id === turfId);
+            console.log(turf);
+            if (turf) {
+                modalTurfName.textContent = turf.name;
+                modalTurfImage.src = turf.image;
+                modalTurfImage.alt = turf.name;
+                modalTurfLocation.textContent = `Location: ${turf.location}`;
+                modalTurfSport.textContent = `Sport: ${turf.sport}`;
+                modalTurfPrice.textContent = `Price: Rs${turf.pricePerHour} per hour`;  // Changed field name
+                modalTurfWidth.textContent = turf.ground_width;  // Changed field name
+                modalTurfLength.textContent = turf.ground_length;  // Changed field name
+                modalTurfHeight.textContent = turf.ground_height;  // Changed field name
+                bookingModal.classList.remove('hidden');
+                bookingModal.classList.add('flex');
+            }
+        }
+
+        function closeModalHandler() {
+            bookingModal.classList.remove('flex');
+            bookingModal.classList.add('hidden');
+        }
+
+        function generateTimeSlots() {
+            const timeSlots = [];
+            for (let hour = 6; hour < 23; hour++) {
+                for (let minute = 0; minute < 60; minute += 30) {
+                    const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                    timeSlots.push(time);
+                }
+            }
+            return timeSlots;
+        }
+
+        function populateTimeSlots() {
+            const timeSlots = generateTimeSlots();
+            bookingTime.innerHTML = '<option value="">Select a time slot</option>';
+            timeSlots.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot;
+                option.textContent = slot;
+                bookingTime.appendChild(option);
+            });
+        }
+
+        function handleBookNowClick(e) {
+            // Ensure the button is clicked and the target is valid
+            if (e.target && e.target.classList.contains('book-now')) {
+                const turfId = parseInt(e.target.getAttribute('data-turf-id'), 10);
+                console.log('Turf ID:', turfId); // Log the ID to see if it's correct
+                openModal(turfId);
+            }
+        }
+
+
+        turfList.addEventListener('click', handleBookNowClick);
+        closeModal.addEventListener('click', closeModalHandler);
+        confirmBooking.addEventListener('click', () => {
+            const selectedDate = bookingDate.value;
+            const selectedTime = bookingTime.value;
+            if (selectedDate && selectedTime) {
+                alert(`Booking confirmed for ${selectedDate} at ${selectedTime}`);
+                closeModalHandler();
+            } else {
+                alert('Please select both date and time');
+            }
+        });
+
+        const bookingdate = document.getElementById('bookingDate');
+        const bookingtime = document.getElementById('bookingTime');
+
+
+        // Add event listener to the booking date input
+        bookingDate.addEventListener('change', function () {
+            const selectedDate = bookingDate.value;
+            if (selectedDate && selectedTurfId) {
+                // Fetch available timeslots for the selected turf and date
+                fetchAvailableTimeslots(selectedTurfId, selectedDate);
+            }
+        });
+
+        // Function to fetch timeslots based on turf ID and date
+        function fetchAvailableTimeslots(turfId, date) {
+            fetch(`/api/slots?turfId=${turfId}&date=${date}`, {
+                method: 'GET',
+                credentials: 'include' // Ensures cookies are sent with the request
+            })
+                .then(response => response.json())
+                .then(timeslots => {
+                    console.log(timeslots);
+                    // Clear previous options
+                    bookingTime.innerHTML = '<option value="">Select a time slot</option>';
+
+                    // Add available timeslot options
+                    timeslots.forEach(timeslot => {
+                        timeSlot = timeslots;
+                        const startTime = timeslot.start_time;
+                        const endTime = timeslot.end_time;
+
+                        // Format start and end time if necessary (you can adjust the format here)
+                        const formattedTime = `${startTime} - ${endTime}`;
+
+                        const option = document.createElement('option');
+                        option.value = timeslot.slot_id;
+                        option.textContent = formattedTime;
+                        bookingTime.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching timeslots:', error);
+                });
+        }
+
+        document.getElementById('confirmBooking').addEventListener('click', function () {
+            const bookingDate = document.getElementById('bookingDate').value;
+            const bookingTime = document.getElementById('bookingTime').value;
+            console.log('Booking Date:', bookingDate); // Check if the booking date is being picked correctly
+            console.log('Booking Time:', bookingTime); 
+            
+            const selectedTurf = turfs.find(t => t.turf_id === selectedTurfId); // Get selected turf details
+            console.log(timeSlot);
+            const selectedTimeslot = timeSlot.find(timeslot => timeslot.slot_id === parseInt(bookingTime)); // Get selected timeslot
+            console.log('Selected Turf:', selectedTurf); // Check if turf data is being correctly selected
+            console.log('Selected Timeslot:', selectedTimeslot);
+
+            if (!bookingDate || !selectedTimeslot) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            async function fetchLoggedInUser() {
+                try {
+                    const response = await fetch('/api/users/me', {
+                        method: 'GET',
+                        credentials: 'include'
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();//get error message
+                        throw new Error(`HTTP error ${response.status}: ${errorText}`);
+                    }
+
+                    const data = await response.json();
+                    console.log('Logged-in user:', data);
+
+                    if (!data || !data.user_id) {
+                        throw new Error("User ID not found in response");
+                    }
+                    const userId = data.user_id;
+
+                    console.log('User ID:', userId);
+                    return userId; // Return the userId
+                } catch (error) {
+                    console.error('Error fetching logged-in user:', error);
+                    throw error;
+                }
+            }
+
+            async function fetchUserDetails(userId) {
+                try {
+                    const response = await fetch(`/api/users/${userId}`, {
+                        method: 'GET',
+                        credentials: 'include'
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();//get error message
+                        throw new Error(`HTTP error ${response.status}: ${errorText}`);
+                    }
+                    const userData = await response.json();
+                    console.log("user Data:", userData);
+                    return userData;
+
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
+                    throw error;
+                }
+            }
+
+            async function initialize() {
+                try {
+                    const userId = await fetchLoggedInUser(); // Wait for user details
+                    console.log(userId);
+                    const userData = await fetchUserDetails(userId);
+                    userDetail = userData;
+                    console.log(userDetail);
+                } catch (error) {
+                    console.error("Initialization failed:", error);
+                    return;
+                }
+
+                const total_price = selectedTurf.pricePerHour;
+
+                const bookingData = {
+                    user: userDetail,
+                    turf: selectedTurf,
+                    slot: selectedTimeslot,
+                    booking_date: bookingDate,
+                    total_price: total_price
+                };
+
+                console.log(bookingData, "this is booking data");
+
+                try {
+                    // Step 1: Store the booking first
+                    const bookingResponse = await fetch('/api/bookings', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(bookingData)
+                    });
+
+                    if (!bookingResponse.ok) {
+                        throw new Error("Booking failed");
+                    }
+
+                    const booking = await bookingResponse.json();
+                    console.log("Booking successful:", booking);
+
+                    // Step 2: Initiate Payment
+                    const paymentResponse = await fetch(`/api/payments/createOrder?amount=${total_price}`, {
+                        method: 'POST'
+                    });
+
+                    if (!paymentResponse.ok) {
+                        throw new Error("Failed to initiate payment");
+                    }
+
+                    const orderData = await paymentResponse.json();
+                    console.log("Payment order created:", orderData);
+
+                    var options = {
+                        "key": "rzp_test_OOSTuqktSzXgII",  // Replace with your Razorpay Key
+                        "amount": parseFloat(orderData.amount).toFixed(2),
+                        "currency": "INR",
+                        "order_id": orderData.id,
+                        "handler": async function (response) {
+                            console.log("Payment successful:", response);
+
+                            // Step 3: Store Payment Info in Database
+                            const paymentData = {
+                                booking_id: booking.booking_id,  // Store booking ID with payment
+                                amount: Number(total_price).toFixed(2),
+                                payment_method: "Razorpay",
+                                // razorpay_payment_id: response.razorpay_payment_id
+                            };
+                            
+
+                            const savePaymentResponse = await fetch('/api/payments/save', {
+                                method: 'POST',
+                                credentials: 'include',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(paymentData)
+                            });
+
+                            if (!savePaymentResponse.ok) {
+                                throw new Error("Payment storage failed");
+                            }
+
+                            console.log("Payment stored successfully");
+                            alert("Booking & Payment Successful!");
+                            closeModalHandler();
+                        }
+                    };
+
+                    var rzp1 = new Razorpay(options);
+                    rzp1.open();
+
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Something went wrong! Please try again.");
+                }
+            }
+
+            // Call initialize function
+            initialize();
+
+            
+        });
+
+        // Function to handle search
+        document.getElementById("searchButton").addEventListener("click", function() {
+            const location = document.getElementById("searchInput").value;
+
+            fetch(`/api/turfs/search?location=${location}`, {
+                method: 'GET',
+                credentials: 'include'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    turfs = data; // Update the turfs array with search results
+                    const turfCount = document.getElementById('turfCount');
+                    turfCount.textContent = data.length; // Update the turf count
+                    turfList.innerHTML = ''; // Clear existing turfs
+                    data.forEach(turf => {
+                        populateTurfs(turf);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Add event listener for Enter key in search input
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                document.getElementById("searchButton").click();
+            }
+        });
+    </script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</body>
+
+</html>

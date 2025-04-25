@@ -1,0 +1,1 @@
+For Api Endpoints hit the following url: http://localhost:8080/swagger-ui/index.html

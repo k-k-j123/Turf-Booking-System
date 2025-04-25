@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turf Booking Dashboard</title>
+    <link rel="icon" href="/images/FindTurfLogo.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        header{
+            height: 20%;
+            /* width:100%; */
+            display: flex;
+        }
+
+        #logo img{
+            width:5rem;
+            height:5rem;
+            border-radius: 50%;
+            margin-left: 0;
+            padding-left: 0%;
+        }
+
+        .nav{
+            justify-content: flex-start;
+            width: 100%;
+            display: flex;
+            background-color: white;
+            position: fixed;
+            margin-left: 30px;
+        }
+
+        .nav-optionsi {
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin: 2rem;
+            font-weight: bolder;
+        }
+
+        .nav-optionsi:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Role-based visibility */
+        .customer-only, .admin-only, .super-admin-only {
+            display: none;
+        }
+
+        body.customer .customer-only,
+        body.admin .admin-only,
+        body.admin .customer-only,
+        body.super_admin .super-admin-only
+        {
+            display: block;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4" style="
+    margin-left: 2px">
+            <div class="flex justify-between items-center py-4" style="width: 100%;">
+                <div id="logo">
+                    <img src="/images/logo.png" alt="sys-logo">
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="/dashboard" class="nav-optionsi text-gray-600 hover:text-green-600">Home</a>
+                    <a href="/listTurfs" class="nav-optionsi customer-only text-gray-600 hover:text-green-600">All Turfs</a>
+                    <!-- <a href="#" class="nav-optionsi customer-only text-gray-600 hover:text-green-600">Cricket</a> -->
+                    <!--<a href="/mybooking" class="nav-optionsi customer-only text-gray-600 hover:text-green-600 md:hidden">My Bookings</a>-->
+                    <a href="/adminPanel" class="nav-optionsi admin-only text-gray-600 hover:text-green-600">Admin-Panel</a>
+                    <a href="/system" class="nav-optionsi super-admin-only text-gray-600 hover:text-green-600">System</a>
+                    <a href="/logout" id="logout" class="nav-optionsi text-gray-600 hover:text-green-600" style="color: rgb(219, 76, 76);">LogOut</a>
+                </nav>
+                <div class="md:hidden">
+                    <button id="menuToggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden">//No need to makes changes here
+            <nav class="flex flex-col space-y-4 py-4 px-4">
+                <a href="#" class="text-gray-600 hover:text-green-600">Home</a>
+                <a href="#" class="text-gray-600 hover:text-green-600">Turfs</a>
+                <a href="#" class="text-gray-600 hover:text-green-600">Cricket</a>
+                <a href="#" class="text-gray-600 hover:text-green-600">My Bookings</a>
+                <a href="#" class="text-gray-600 hover:text-green-600">About</a>
+                <a href="#" class="text-gray-600 hover:text-green-600">Contact</a>
+            </nav>
+        </div>
+    </header>
+    <main class="customer-only flex-grow customer">
+        <section class="bg-green-100 py-12">
+            <div class="container mx-auto px-4">
+                <h1 class="text-4xl font-bold text-center mb-6">Book Your Perfect Turf</h1>
+                <p class="text-xl text-center mb-8">Find and book the best football and cricket turfs in your area</p>
+                <div class="bg-white rounded-lg shadow-md p-6 max-w-3xl mx-auto">
+                    <div class="flex flex-col md:flex-row items-center gap-4">
+                        <div class="relative flex-grow w-full">
+                            <input type="text" id="searchInput" placeholder="Search for turfs..." style="padding-top: 18px; padding-bottom: 18px;" class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <button id="searchButton" style="padding-top: 30px; padding-bottom: 30px; padding-left: 20px;padding-right: 20px; margin-left: 1px; width: 6rem; height: 2rem; " class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors duration-300 flex items-center justify-center w-full md:w-auto">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-semibold mb-8 text-center">Featured Turfs</h2>
+                <div id="turfsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Turf cards will be dynamically populated here -->
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-gray-100 py-12">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-semibold mb-8 text-center">What Our Customers Say</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center mb-4">
+                            <img src="/images/pjoto.jpg?height=100&width=100" alt="img" class="w-12 h-12 rounded-full mr-4">
+                            <h3 class="text-xl font-semibold">Manish Shetty</h3>
+                        </div>
+                        <p class="text-gray-600">Great experience booking through TurfBook. The process was smooth and the turf was excellent!</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center mb-4">
+                            <img src="/images/kkj.jpg?height=100&width=100" alt="img" class="w-12 h-12 rounded-full mr-4">
+                            <h3 class="text-xl font-semibold">Kaushik Joshi</h3>
+                        </div>
+                        <p class="text-gray-600">I love how easy it is to find and book cricket turfs. Highly recommended!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div style="margin-left: 200px;" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">TurfBook</h3>
+                    <p class="text-gray-400">Book your perfect sports turf with ease.</p>
+                </div>
+                <div style="margin-left: 50px;">
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <nav class="flex flex-col space-y-2">
+                        <a href="#" class="text-gray-400 hover:text-white">About Us</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Contact</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                    </nav>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-gray-400">
+                <p>&copy; 2025 TurfBook. All rights reserved BY Manish & Kaushik.</p>
+            </div>
+        </div>
+    </footer>
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 11;">
+        <!-- Success Toast -->
+        <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Login successful! Welcome to Manish Turf Website.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+
+        <!-- Error Toast -->
+        <div id="errorToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Invalid credentials. Please try again.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        
+        fetch('/api/users/get-user-role', {
+            method: 'GET',
+            credentials: 'include' // Ensures cookies are sent with the request
+        }).then(response => response.json())
+        .then(data => {
+            console.log("User role:", data.role);
+            document.body.className = data.role;
+            let role = document.getElementsByClassName('role')
+            console.log(role);
+            if (data.role === "super_admin") {
+                window.location.href = '/superadmin';
+            }
+            // Redirect or show content based on the role
+        }).catch(error => {
+            console.error("Error fetching role:", error);
+        });
+
+        function showToast(message) {
+            console.log('Showing toast:', message);
+            const toastElement = document.getElementById('errorToast');
+            const toastBody = toastElement.querySelector('.toast-body'); // Target the text container
+            toastBody.innerText = message; // Set dynamic message
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        }
+        let val = true;
+        if(val){
+            showToast("Welcome User :)");
+            val = false;
+        }
+        const logbtn = document.getElementById("logout");
+        logbtn.addEventListener('click',(event) => {
+            event.preventDefault();
+            fetch('/api/users/logout', {
+                method: 'POST',
+                credentials: 'include', // Include cookies in the request
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Logged out successfully!");
+                        window.location.href = '/login'; // Redirect to login page
+                    } else {
+                        alert("Failed to log out!");
+                    }
+                })
+                .catch(error => console.error("Error logging out:", error));
+
+                    })
+
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+
+        // Function to create a turf card
+        function createTurfCard(turf) {
+            const turfElement = document.createElement("div");
+            turfElement.innerHTML = `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="${turf.image}" alt="${turf.name}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold mb-2">${turf.name}</h3>
+                        <p class="text-gray-600 mb-2">Location: ${turf.location}</p>
+                        <p class="text-gray-600 mb-2">Sport: ${turf.sport}</p>
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="ml-1">${turf.rating || '4.5'}</span>
+                        </div>
+                        <a href="/listTurfs" class="btn bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors w-full inline-block text-center">Book Now</a>
+                    </div>
+                </div>
+            `;
+            return turfElement;
+        }
+
+        // Function to display turfs
+        function displayTurfs(turfs) {
+            const turfsContainer = document.getElementById("turfsContainer");
+            turfsContainer.innerHTML = "";
+
+            turfs.forEach(turf => {
+                const turfElement = createTurfCard(turf);
+                turfsContainer.appendChild(turfElement);
+            });
+        }
+
+        // Function to handle search
+        document.getElementById("searchButton").addEventListener("click", function() {
+            const location = document.getElementById("searchInput").value;
+
+            fetch(`/api/turfs/search?location=${location}`, {
+                method: 'GET',
+                credentials: 'include'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    displayTurfs(data);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Load initial featured turfs
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/turfs', {
+                method: 'GET',
+                credentials: 'include'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Display only first 3 turfs for featured section
+                    const featuredTurfs = data.slice(0, 3);
+                    displayTurfs(featuredTurfs);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-8">
+        <div class="max-w-md mx-auto bg-white rounded-xl shadow-2xl transform transition-all hover:scale-105 hover:shadow-3xl p-6">
+            <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Booking Details</h1>
+            <div class="space-y-4">
+                <!-- Ground Name -->
+                <div>
+                    <label for="groundName" class="block text-gray-700 font-bold mb-2">Ground Name</label>
+                    <input type="text" id="groundName" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="Cricket Turf" readonly>
+                </div>
+
+                <!-- Image Block -->
+                <div class="mt-4">
+                    <img src="https://via.placeholder.com/400x200" alt="Ground Image" class="w-full h-48 object-cover rounded-lg shadow-md">
+                </div>
+
+                <!-- Time Slot -->
+                <div>
+                    <label for="timeSlot" class="block text-gray-700 font-bold mb-2">Time Slot</label>
+                    <input type="text" id="timeSlot" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="06:00 - 07:00 pm" readonly>
+                </div>
+
+                <!-- Booking ID -->
+                <div>
+                    <label for="bookingId" class="block text-gray-700 font-bold mb-2">Booking Id</label>
+                    <input type="text" id="bookingId" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="PSMPV58F9B" readonly>
+                </div>
+
+                <!-- Status Dropdown -->
+                <div>
+                    <label for="status" class="block text-gray-700 font-bold mb-2">Status</label>
+                    <select id="status" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="Pending">Pending</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Confirmed" selected>Confirmed</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Confirm Booking Button -->
+            <div class="mt-6 text-center">
+                <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all transform hover:scale-105">
+                    Confirm Booking
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
